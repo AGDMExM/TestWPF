@@ -1,0 +1,48 @@
+use water_carrier;
+
+create table employees
+(
+	id int PRIMARY KEY not null identity(1,1),
+	surname nvarchar(MAX) not null,
+	name nvarchar(MAX) not null,
+	middle_name nvarchar(MAX) not null,
+	date_of_birth datetime not null,
+	gender nvarchar(7) not null check (gender in  ('Мужской', 'Женский'))
+);
+
+create table divisions
+(
+	id int PRIMARY KEY not null identity(1,1),
+	name nvarchar(MAX) not null,
+	idDirector int not null,
+	foreign key (idDirector) references employees (id)
+);
+
+create table orders
+(
+	id int PRIMARY KEY not null identity(1,1),
+	number int not null,
+	name nvarchar(MAX) not null,
+	idEmployee int not null,
+	foreign key (idEmployee) references employees (id)
+);
+
+create table tags
+(
+	id int PRIMARY KEY not null identity(1,1),
+	name nvarchar(MAX) not null,
+	description nvarchar(MAX)
+);
+
+create table tags_for_orders
+(
+	idTag int not null,
+	idOrder int not null,
+	primary key(idTag, idOrder),
+	foreign key (idTag) references tags (id),
+	foreign key (idOrder) references orders (id)
+);
+	
+alter table employees add idDivision int null foreign key (idDivision) references divisions (id);
+
+alter table employees alter column idDivision int null;
